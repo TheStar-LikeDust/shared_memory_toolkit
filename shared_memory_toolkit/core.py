@@ -82,13 +82,14 @@ def _get_share_memory(shared_memory_name: str) -> Tuple[SharedMemory, Lock]:
 
         _share_memory_cache_mapper[shared_memory_name] = shared
 
+    # FIXME: 无法删除
     # case: 当前找到的共享内存大小小于FIX_LENGTH，则关闭改共享内存然后重新创建
-    if len(shared.buf) <= FIX_LENGTH:
-        shared.close()
-        shared.unlink()
-        shared = SharedMemory(name=shared_memory_name, create=True, size=FIX_LENGTH)
-
-        _share_memory_cache_mapper[shared_memory_name] = shared
+    # if len(shared.buf) <= FIX_LENGTH:
+    #     shared.close()
+    #     shared.unlink()
+    #     shared = SharedMemory(name=shared_memory_name, create=True, size=FIX_LENGTH)
+    #
+    #     _share_memory_cache_mapper[shared_memory_name] = shared
 
     # 如果不存在锁对象，则创建一个锁对象
     if shared_memory_name not in _share_memory_lock_mapper:
