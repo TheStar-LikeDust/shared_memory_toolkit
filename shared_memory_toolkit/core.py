@@ -32,22 +32,17 @@ _share_memory_cache_mapper: Dict[str, SharedMemory] = {}
 """Dict[str, SharedMemory]: 存储共享内存名字和共享内存实体对象的共享内存对象字典"""
 
 
-def _get_share_memory(shared_memory_name: str) -> Tuple[SharedMemory, Lock]:
+def get_share_memory(shared_memory_name: str, memory_size: int = None) -> Tuple[SharedMemory, Lock]:
     """从共享内存映射表中加载一个共享内存，返回共享内存对象和对应的锁。
 
-    如果不存在（第一次加载）共享内存，则会创建一个FIX_LENGTH大小的共享内存，和相应的锁。
-
-    Note:
-        如果不在同一个进程下也可以相互访问共享内存。
-
-    Note:
-        如果执行了initial_shared_memory_lock，则会通过一个跨进程字典来使不同进程之间保持同一个锁。
+    如果不存在此（第一次加载）共享内存，则会创建一个FIX_LENGTH大小的共享内存，和相应的锁。
 
     Args:
-        shared_memory_name (str): 共享内存名字。
+        shared_memory_name (str): 共享内存名
+        memory_size (int, optional): 共享内存大小. Defaults to None.
 
     Returns:
-        Tuple[SharedMemory, Lock]: 共享内存和锁的元组。
+        Tuple[SharedMemory, Lock]: 共享内存和对应的锁
     """
     # 获取此操作的锁
     lock = get_shm_lock(shared_memory_name)
@@ -62,8 +57,11 @@ def _get_share_memory(shared_memory_name: str) -> Tuple[SharedMemory, Lock]:
             # 同步：尝试创建
             # case: 系统中不存在此共享内存，则创建一个新的共享内存区
             try:
-                shared = SharedMemory(name=shared_memory_name, create=True, size=FIX_LENGTH)
-                assert len(shared.buf) == FIX_LENGTH
+                shared = SharedMemory(
+                    name=shared_memory_name,
+                    create=True,
+                    size=memory_size if memory_size else FIX_LENGTH
+                )
             # case: 系统中存在此共享内存，则创建共享内存对象并放入当前进程的共享内存对象字典
             except FileExistsError:
                 shared = SharedMemory(name=shared_memory_name, create=False)

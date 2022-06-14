@@ -2,33 +2,30 @@
 
 A Python shared memory toolkit for process picture between different processes.
 
+# Upgrade: 支持读写不同形状的图片，读写不同大小的共享内存
+
 ### How to use
 
 main process - 主进程
 
 ```python
-# optional
+from shared_memory_toolkit import load_image_from_shared_memory, dump_image_into_shared_memory
+
+# load image
 import cv2
-from shared_memory_toolkit import dump_image_into_shared_memory
 
-image = cv2.imread('test.pic')
-dump_image_into_shared_memory('uuid_content', image)
+raw_image = cv2.imread('image')
+
+image_shm_name = 'camera_1817'
+dump_image_into_shared_memory(image_shm_name, raw_image)
+
+# in other process
+
+image = load_image_from_shared_memory('camera_1817')
+
+# raw_image == image
 ```
-
-sub process - 子进程
-
-```python
-from shared_memory_toolkit import load_image_from_shared_memory
-
-# ... some other codes
-
-image = load_image_from_shared_memory('uuid_content')
-```
-
-主进程和子进程中的image将会完全保持一致：由同样的bytes转换而来。
 
 #### TODO:
 
-1. unittest for raw_image.
-2. base64_image module.
-3. README and docs.
+1. base64_image module.

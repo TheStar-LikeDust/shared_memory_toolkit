@@ -18,6 +18,10 @@ _lock_list: List[Lock] = []
 def get_shm_lock(shm_name) -> Lock:
     """获取共享内存对应的跨进程锁"""
 
+    # 如果没有初始化进程间锁，则会使用默认的锁。
+    if not _lock_list:
+        return _lock
+
     # 同步：先查找映射字典中是否有该共享内存
     with _lock:
         # case: 不存在共享内存，则需要创建。
@@ -57,7 +61,7 @@ def initial_sync_in_fork(lock_number: int = 64) -> Tuple[Lock, Dict[str, int], L
 
 
 def initial_sync_in_spawn(lock_number: int = 64) -> Tuple[Lock, Dict[str, int], List[Lock]]:
-    """Spawn方式的启动：需要在主进程先调用此方法，再将同步对象手动放入子进程中
+    """Spawn方式的启动：需要在主进程先调用此方法，再将同步对象手动放入子进程中。
 
     Args:
         lock_number (int, optional): 子进程的对应的锁数量. Defaults to 64.
@@ -75,7 +79,7 @@ def initial_sync_in_spawn(lock_number: int = 64) -> Tuple[Lock, Dict[str, int], 
 
 
 def synchronization_setter(lock: Lock, name_index_mapper: Dict[str, int], lock_list: List[Lock]) -> NoReturn:
-    """用于Spawn启动，手动设置子进程的同步对象
+    """用于Spawn启动时，手动传入子进程的同步对象。
 
     Args:
         lock (Lock): 控制映射表的锁
