@@ -94,7 +94,13 @@ def synchronization_setter(lock: Lock, name_index_mapper: Dict[str, int], lock_l
     _lock_list = lock_list
 
 
-# 自动启动
+def initial_sync() -> NoReturn:
+    """自动创建"""
 
-if get_start_method() == 'fork':
-    initial_sync_in_fork(64)
+    if get_start_method() == 'fork':
+        initial_sync_in_fork(64)
+    elif get_start_method() == 'spawn':
+        initial_sync_in_spawn(64)
+
+
+# initial_sync()

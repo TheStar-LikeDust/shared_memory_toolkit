@@ -4,13 +4,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='stream_watcher',
-    version='0.1',
-    keywords='Stream',
-    description='A Pythonic way to manage streams in one file.',
+    name='shared_memory_toolkit',
+    version='0.1.1',
+    keywords='SharedMemory',
+    description='A Python shared memory toolkit for process picture between different processes.',
     author='Logic',
     author_email='logic.irl@outlook.com',
-    url='https://github.com/TheStar-LikeDust/shared_memory_toolkit.git',
+    url='https://github.com/TheStar-LikeDust/shared_memory_toolkit',
     python_requires='>=3.8',
     packages=find_packages(exclude=['tests*']),
     license='Apache License 2.0'
