@@ -1,3 +1,13 @@
+# whitelist
+*.*
+
+!/shared_memory_toolkit/**/*.*
+!/tests/**/*.*
+!.gitignore
+!LICENSE
+!README.md
+!setup.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

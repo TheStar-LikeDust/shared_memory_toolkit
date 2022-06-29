@@ -26,13 +26,13 @@ from typing import Dict, Tuple
 from .sync import get_shm_lock
 
 FIX_LENGTH: int = 6220800
-"""固定数据块（图片）的大小，用于从不定大小的共享内存中获取定长数据，默认为1920*1080*3大小的图片。"""
+"""默认的大小，用于从不定大小的共享内存中获取定长数据，默认为1920*1080*3大小的图片。"""
 
 _share_memory_cache_mapper: Dict[str, SharedMemory] = {}
 """Dict[str, SharedMemory]: 存储共享内存名字和共享内存实体对象的共享内存对象字典"""
 
 
-def get_share_memory(shared_memory_name: str, memory_size: int = None) -> Tuple[SharedMemory, Lock]:
+def get_share_memory(shared_memory_name: str, memory_size: int = FIX_LENGTH) -> Tuple[SharedMemory, Lock]:
     """从共享内存映射表中加载一个共享内存，返回共享内存对象和对应的锁。
 
     如果不存在此（第一次加载）共享内存，则会创建一个FIX_LENGTH大小的共享内存，和相应的锁。

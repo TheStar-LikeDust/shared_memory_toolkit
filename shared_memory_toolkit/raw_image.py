@@ -10,9 +10,6 @@
     1. dump_image_into_shared_memory: Dump image
     2. load_image_from_shared_memory: Load image
 
-TODO:
-
-    1. 基于shm的numpy数组
 """
 from typing import Tuple
 from multiprocessing.shared_memory import SharedMemory
@@ -31,7 +28,7 @@ get_image_size = lambda x: x[0] * x[1] * x[2]
 def dump_image_into_shared_memory(
         shared_memory_name: str,
         image: numpy.ndarray,
-        memory_size: int = 6220800,
+        memory_size: int = FIX_LENGTH,
 ) -> SharedMemory:
     """将当前的图片dump成共享内存放入当前的共享内存映射中，此操作加锁
 
